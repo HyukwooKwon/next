@@ -42,6 +42,7 @@ function PageContent() {
     wsRef.current.onopen = () => {
       setIsConnected(true);
       inputPauseRef.current = false;
+
       wsRef.current?.send(
         JSON.stringify({
           event: "start",
@@ -52,6 +53,27 @@ function PageContent() {
         })
       );
       addDebugMessage("✅ WebSocket 연결됨");
+
+      // ✅ 최초 연결 즉시 빈 PCM 데이터를 전송하여 VAD 초기화 문제를 해결
+      setTimeout(() => {
+        const emptyPcm = new Int16Array(16000 * 0.1); // 0.1초(1600 samples) 분량의 빈 PCM 데이터
+        const pcmBlob = new Blob([emptyPcm.buffer], {
+          type: "application/octet-stream",
+        });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64Audio = (reader.result as string).split(",")[1];
+          wsRef.current?.send(
+            JSON.stringify({
+              event: "media",
+              streamSid: streamIdRef.current,
+              media: { payload: base64Audio },
+            })
+          );
+          addDebugMessage("✅ 최초 빈 PCM 데이터 전송 완료");
+        };
+        reader.readAsDataURL(pcmBlob);
+      }, 500); // 0.5초 후에 실행하여 WebSocket 연결이 안정화된 후 전송
     };
 
     wsRef.current.onmessage = (event) => {

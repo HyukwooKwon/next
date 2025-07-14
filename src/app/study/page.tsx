@@ -1,6 +1,22 @@
 "use client";
+import { useAudioStore } from "@/store/audioStore";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useRef, useState } from "react";
+
+async function handleLogin(email: string, password: string) {
+  const response = await fetch("/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    useAudioStore.getState().setJwtToken(data.token);
+  } else {
+    alert("로그인 실패");
+  }
+}
 
 type ChatMessage = {
   type: "user" | "ai";
@@ -34,9 +50,18 @@ function PageContent() {
   };
 
   const connectWebSocket = () => {
+    const jwtToken = useAudioStore.getState().jwtToken;
+
+    if (!jwtToken) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
     wsRef.current = new WebSocket(
-      process.env.NEXT_PUBLIC_WEBSOCKET_URL ||
+      `${
+        process.env.NEXT_PUBLIC_WEBSOCKET_URL ||
         "wss://gagell.ngrok.io/realtime_stream_webrtc"
+      }?token=${jwtToken}`
     );
 
     wsRef.current.onopen = () => {

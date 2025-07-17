@@ -25,7 +25,7 @@ type ChatMessage = {
 
 function PageContent() {
   const searchParams = useSearchParams();
-  const companyId = searchParams.get("lang");
+  const companyId = searchParams.get("lang") || "default_company";
 
   const [isConnected, setIsConnected] = useState(false);
   const [, setIsSpeaking] = useState(false);
@@ -57,11 +57,15 @@ function PageContent() {
       return;
     }
 
+    // wsRef.current = new WebSocket(
+    //   `${
+    //     process.env.NEXT_PUBLIC_WEBSOCKET_URL ||
+    //     "wss://gagell.ngrok.io/realtime_stream_webrtc"
+    //   }?token=${jwtToken}`
+    // );
+
     wsRef.current = new WebSocket(
-      `${
-        process.env.NEXT_PUBLIC_WEBSOCKET_URL ||
-        "wss://gagell.ngrok.io/realtime_stream_webrtc"
-      }?token=${jwtToken}`
+      `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}?token=${jwtToken}`
     );
 
     wsRef.current.onopen = () => {

@@ -7,6 +7,8 @@ export default function Home() {
   const router = useRouter();
   const [language, setLanguage] = useState("");
   const jwtToken = useAudioStore((state) => state.jwtToken);
+  const points = useAudioStore((state) => state.points); // ✅ 포인트 상태 불러오기 추가
+  const subscriptionActive = useAudioStore((state) => state.subscriptionActive);
 
   const handleLogin = () => router.push("/login"); // 로그인 페이지로 이동
   const handleRegister = () => router.push("/register");
@@ -47,7 +49,8 @@ export default function Home() {
           </>
         ) : (
           <div className="mb-4">
-            <span className="mr-4">로그인됨</span>
+            <span className="mr-4">💰 현재 포인트: {points}P</span>{" "}
+            {/* ✅ 포인트 표시 */}
             <button
               className="px-4 py-2 bg-yellow-500 text-white rounded"
               onClick={handleCharge}
@@ -56,6 +59,12 @@ export default function Home() {
             </button>
           </div>
         )}
+      </div>
+
+      <div>
+        {subscriptionActive
+          ? "✅ 현재 구독중입니다."
+          : "❌ 구독 중이 아닙니다."}
       </div>
 
       <select

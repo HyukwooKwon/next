@@ -19,9 +19,10 @@ export default function LoginPage() {
     if (response.ok) {
       const data = await response.json();
       useAudioStore.getState().setJwtToken(data.token);
+      useAudioStore.getState().setPoints(data.points); // ✅ 포인트 저장 추가
 
       alert("로그인 성공");
-      router.push("/study");
+      router.push("/");
     } else {
       alert("로그인 실패: 이메일 또는 비밀번호를 확인하세요.");
     }

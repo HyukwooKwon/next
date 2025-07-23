@@ -1,11 +1,25 @@
 "use client";
-import PortOne from "@portone/browser-sdk/v2";
 import { useAudioStore } from "@/store/audioStore";
+import PortOne from "@portone/browser-sdk/v2";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+// 직접 정의한 정확한 타입 (PortOne SDK 문서 기반)
+type PgProvider =
+  | "PG_PROVIDER_TOSSPAYMENTS"
+  | "PG_PROVIDER_INICIS"
+  | "PG_PROVIDER_NICE"
+  | "PG_PROVIDER_KAKAOPAY"
+  | "PG_PROVIDER_NAVERPAY";
 
 export default function ChargePage() {
   const router = useRouter();
   const jwtToken = useAudioStore.getState().jwtToken;
+
+  // PG사 선택 기본값 설정
+  const [selectedPG, setSelectedPG] = useState<PgProvider>(
+    "PG_PROVIDER_TOSSPAYMENTS"
+  );
 
   const handlePayment = async (
     paymentId: string,
@@ -16,10 +30,11 @@ export default function ChargePage() {
   ) => {
     const payment = await PortOne.requestPayment({
       storeId: process.env.NEXT_PUBLIC_PORTONE_STORE_ID!,
+      pgProvider: selectedPG, // 정확히 타입 맞춤
       paymentId,
       orderName,
       totalAmount,
-      currency: "CURRENCY_KRW", // ✅ PortOne SDK에서 정확히 요구하는 타입
+      currency: "CURRENCY_KRW", // 공식 문서 기준 정확한 ISO 코드
       payMethod: "CARD",
       customer: {
         fullName: "사용자이름",
@@ -27,7 +42,6 @@ export default function ChargePage() {
     });
 
     if (!payment || payment.code !== undefined) {
-      // ✅ 명시적으로 payment undefined 처리
       alert(`결제 실패: ${payment?.message || "알 수 없는 오류 발생"}`);
       return;
     }
@@ -84,6 +98,20 @@ export default function ChargePage() {
     <div className="min-h-screen flex items-center justify-center">
       <div className="w-96 p-4 border rounded shadow space-y-4">
         <h2 className="text-xl font-bold mb-2">💰 포인트 충전</h2>
+
+        {/* PG사 선택 드롭다운 */}
+        <select
+          className="w-full p-2 border rounded"
+          value={selectedPG}
+          onChange={(e) => setSelectedPG(e.target.value as PgProvider)}
+        >
+          <option value="PG_PROVIDER_TOSSPAYMENTS">토스페이먼츠</option>
+          <option value="PG_PROVIDER_INICIS">KG이니시스</option>
+          <option value="PG_PROVIDER_NICEPAYMENTS">나이스페이먼츠</option>
+          <option value="PG_PROVIDER_KAKAOPAY">카카오페이</option>
+          <option value="PG_PROVIDER_NAVERPAY">네이버페이</option>
+        </select>
+
         <button
           className="w-full p-2 bg-green-500 text-white rounded"
           onClick={() =>

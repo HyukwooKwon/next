@@ -95,106 +95,71 @@ export default function ChargePage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="w-96 p-4 border rounded shadow space-y-4">
-        <h2 className="text-xl font-bold mb-2">💰 포인트 충전</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-50 p-4">
+      <div className="md3-card max-w-lg w-full p-6 space-y-6">
+        <h2 className="md3-headline-small text-primary text-center">
+          💰 포인트 충전 및 구독 결제
+        </h2>
 
-        {/* PG사 선택 드롭다운 */}
         <select
-          className="w-full p-2 border rounded"
+          className="w-full p-3 border rounded-lg md3-body-medium"
           value={selectedPG}
           onChange={(e) => setSelectedPG(e.target.value as PgProvider)}
         >
           <option value="PG_PROVIDER_TOSSPAYMENTS">토스페이먼츠</option>
           <option value="PG_PROVIDER_INICIS">KG이니시스</option>
-          <option value="PG_PROVIDER_NICEPAYMENTS">나이스페이먼츠</option>
+          <option value="PG_PROVIDER_NICE">나이스페이먼츠</option>
           <option value="PG_PROVIDER_KAKAOPAY">카카오페이</option>
           <option value="PG_PROVIDER_NAVERPAY">네이버페이</option>
         </select>
 
-        <button
-          className="w-full p-2 bg-green-500 text-white rounded"
-          onClick={() =>
-            handlePayment(
-              `point_${Date.now()}`,
-              "500 포인트 충전",
-              5000,
-              "point",
-              500
-            )
-          }
-        >
-          500P 충전 (₩5,000)
-        </button>
-        <button
-          className="w-full p-2 bg-green-500 text-white rounded"
-          onClick={() =>
-            handlePayment(
-              `point_${Date.now()}`,
-              "1000 포인트 충전",
-              9500,
-              "point",
-              1000
-            )
-          }
-        >
-          1,000P 충전 (₩9,500)
-        </button>
-        <button
-          className="w-full p-2 bg-green-500 text-white rounded"
-          onClick={() =>
-            handlePayment(
-              `point_${Date.now()}`,
-              "2000 포인트 충전",
-              18000,
-              "point",
-              2000
-            )
-          }
-        >
-          2,000P 충전 (₩18,000)
-        </button>
+        <div className="grid grid-cols-1 gap-4">
+          {[500, 1000, 2000].map((p) => (
+            <button
+              key={p}
+              className="md3-button-filled"
+              onClick={() =>
+                handlePayment(
+                  `point_${Date.now()}`,
+                  `${p} 포인트 충전`,
+                  p * 10 - (p >= 1000 ? p * 0.5 : 0),
+                  "point",
+                  p
+                )
+              }
+            >
+              {p.toLocaleString()}P 충전 (₩
+              {(p * 10 - (p >= 1000 ? p * 0.5 : 0)).toLocaleString()})
+            </button>
+          ))}
+        </div>
 
-        <h2 className="text-xl font-bold mb-2 pt-4">🚀 구독 서비스 결제</h2>
-        <button
-          className="w-full p-2 bg-blue-500 text-white rounded"
-          onClick={() =>
-            handlePayment(
-              `sub_${Date.now()}`,
-              "1개월 구독 결제",
-              9900,
-              "subscription"
-            )
-          }
-        >
-          1개월 구독 (₩9,900)
-        </button>
-        <button
-          className="w-full p-2 bg-blue-500 text-white rounded"
-          onClick={() =>
-            handlePayment(
-              `sub_${Date.now()}`,
-              "3개월 구독 결제",
-              27000,
-              "subscription"
-            )
-          }
-        >
-          3개월 구독 (₩27,000)
-        </button>
-        <button
-          className="w-full p-2 bg-blue-500 text-white rounded"
-          onClick={() =>
-            handlePayment(
-              `sub_${Date.now()}`,
-              "1년 구독 결제",
-              99000,
-              "subscription"
-            )
-          }
-        >
-          1년 구독 (₩99,000)
-        </button>
+        <h2 className="md3-title-large text-secondary text-center mt-8">
+          🚀 구독 서비스 결제
+        </h2>
+
+        <div className="grid grid-cols-1 gap-4">
+          {[
+            { months: 1, price: 9900 },
+            { months: 3, price: 27000 },
+            { months: 12, price: 99000 },
+          ].map((sub) => (
+            <button
+              key={sub.months}
+              className="md3-button-tonal"
+              onClick={() =>
+                handlePayment(
+                  `sub_${Date.now()}`,
+                  `${sub.months}개월 구독 결제`,
+                  sub.price,
+                  "subscription"
+                )
+              }
+            >
+              {sub.months}개월 구독 (₩{sub.price.toLocaleString()})
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

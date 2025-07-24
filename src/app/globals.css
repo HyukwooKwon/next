@@ -1,15 +1,36 @@
 @import "tailwindcss";
 
+
 :root {
+  /* 기존 색상 유지 */
   --background: #ffffff;
   --foreground: #171717;
-}
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Material Design 3 Colors */
+  --md3-primary: #1976d2;
+  --md3-on-primary: #ffffff;
+  --md3-primary-container: #d4e4ff;
+  --md3-on-primary-container: #041e42;
+  --md3-secondary: #565f71;
+  --md3-on-secondary: #ffffff;
+  --md3-secondary-container: #dae2f9;
+  --md3-on-secondary-container: #131c2b;
+  --md3-tertiary: #705575;
+  --md3-on-tertiary: #ffffff;
+  --md3-tertiary-container: #fbd7fc;
+  --md3-on-tertiary-container: #29132e;
+  --md3-error: #ba1a1a;
+  --md3-on-error: #ffffff;
+  --md3-error-container: #ffdad6;
+  --md3-on-error-container: #410002;
+  --md3-surface: #fefbff;
+  --md3-on-surface: #1b1b1f;
+  --md3-surface-variant: #e0e2ec;
+  --md3-on-surface-variant: #44474f;
+  --md3-outline: #74777f;
+  --md3-outline-variant: #c4c6d0;
+  --md3-inverse-surface: #303034;
+  --md3-inverse-on-surface: #f2f0f4;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +44,160 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Material Design 3 Typography */
+.md3-display-large {
+  font-size: 57px;
+  line-height: 64px;
+  font-weight: 400;
+  letter-spacing: -0.25px;
+}
+
+.md3-display-medium {
+  font-size: 45px;
+  line-height: 52px;
+  font-weight: 400;
+}
+
+.md3-headline-large {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 400;
+}
+
+.md3-headline-small {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 400;
+}
+
+.md3-title-large {
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 400;
+}
+
+.md3-title-medium {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  letter-spacing: 0.15px;
+}
+
+.md3-body-large {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.md3-body-medium {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0.25px;
+}
+
+.md3-label-large {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+
+/* Material Design 3 Components */
+.md3-card {
+  background: var(--md3-surface);
+  border-radius: 12px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.md3-card:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.md3-button-filled {
+  background: var(--md3-primary);
+  color: var(--md3-on-primary);
+  border: none;
+  border-radius: 20px;
+  padding: 10px 24px;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.1px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.md3-button-filled:hover {
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.md3-button-outlined {
+  background: transparent;
+  color: var(--md3-primary);
+  border: 1px solid var(--md3-outline);
+  border-radius: 20px;
+  padding: 10px 24px;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.1px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.md3-button-outlined:hover {
+  background: rgba(25, 118, 210, 0.08);
+}
+
+.md3-button-tonal {
+  background: var(--md3-secondary-container);
+  color: var(--md3-on-secondary-container);
+  border: none;
+  border-radius: 20px;
+  padding: 10px 24px;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.1px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.md3-button-tonal:hover {
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+.md3-chip {
+  background: var(--md3-surface-variant);
+  color: var(--md3-on-surface-variant);
+  border: 1px solid var(--md3-outline-variant);
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+}
+
+.md3-chip:hover {
+  background: var(--md3-secondary-container);
+  color: var(--md3-on-secondary-container);
+}
+
+/* Material Design Motion */
+.md3-motion-standard {
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.md3-motion-decelerated {
+  transition: all 0.4s cubic-bezier(0, 0, 0.2, 1);
+}
+
+.md3-motion-accelerated {
+  transition: all 0.2s cubic-bezier(0.4, 0, 1, 1);
 }
